@@ -3,7 +3,7 @@ node_modules
 dist
 
 # Env files
-.env.*
+.env
 
 # Tests
 coverage

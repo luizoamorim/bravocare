@@ -1,0 +1,19 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model question_one_shifts {
+  shift_id    Int      @id
+  facility_id Int
+  shift_date  DateTime
+  start_time  DateTime
+  end_time    DateTime
+}
