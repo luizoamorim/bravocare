@@ -1,29 +1,29 @@
 version: "3"
 
 services:
-  pg1:
-    image: postgres:13-alpine
-    environment:
-      POSTGRES_PASSWORD: "p0stgr35!"
-    ports:
-      - "5432:5432"
-    volumes:
-      - /home/$username/postgres/db:/var/lib/postgresql/data
-    networks:
-      - postgres-network
+    pg1:
+        image: postgres:13-alpine
+        environment:
+            POSTGRES_PASSWORD: "p0stgr35!"
+        ports:
+            - "5432:5432"
+        volumes:
+            - /home/$username/postgres/db:/var/lib/postgresql/data
+        networks:
+            - postgres-network
 
-  pgadmin1:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "user@domain.com"
-      PGADMIN_DEFAULT_PASSWORD: "5up3r53cret!"
-    ports:
-      - "8081:80"
-    depends_on:
-      - pg1
-    networks:
-      - postgres-network
+    pgadmin1:
+        image: dpage/pgadmin4
+        environment:
+            PGADMIN_DEFAULT_EMAIL: "user@domain.com"
+            PGADMIN_DEFAULT_PASSWORD: "5up3r53cret!"
+        ports:
+            - "8081:80"
+        depends_on:
+            - pg1
+        networks:
+            - postgres-network
 
 networks:
-  postgres-network:
-    driver: bridge
+    postgres-network:
+        driver: bridge
