@@ -11,9 +11,38 @@ datasource db {
 }
 
 model question_one_shifts {
-  shift_id    Int      @id
+  shift_id    Int        @id
+  facilities  facilities @relation(fields: [facility_id], references: [facility_id])
   facility_id Int
   shift_date  DateTime
   start_time  DateTime
   end_time    DateTime
+}
+
+model facilities {
+  facility_id   Int                   @id
+  facility_name String
+  shifts        question_one_shifts[]
+  jobs          jobs[]
+}
+
+model jobs {
+  job_id                     Int        @id
+  facilities                 facilities @relation(fields: [facility_id], references: [facility_id])
+  facility_id                Int
+  nurse_type_needed          String
+  total_number_nurses_needed Int
+}
+
+model nurses {
+  nurse_id   Int    @id
+  nurse_name String
+  nurse_type String
+}
+
+model nurse_hired_jobs {
+  job_id   Int
+  nurse_id Int
+
+  @@id([job_id, nurse_id])
 }

@@ -3,7 +3,13 @@ import { prisma } from "../lib/prisma";
 
 export async function questionOneShiftsRoutes(fastify: FastifyInstance) {
     fastify.get("/shifts", async () => {
-        const shifts = await prisma.question_one_shifts.findMany();
+        const shifts = await prisma.question_one_shifts.findMany({
+            include: {
+                facilities: {
+                    select: { facility_name: true },
+                },
+            },
+        });
         return { shifts };
     });
 }
