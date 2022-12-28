@@ -1,4 +1,4 @@
-import { IShiftsWithFacilityName } from "../../data";
+import { IShiftsWithFacilityId, IShiftsWithFacilityName } from "../../data";
 import ShiftsRepository from "../shiftsRepository";
 import { prisma } from "../../lib/prisma";
 
@@ -18,15 +18,20 @@ export class PostgresShiftsRepository implements ShiftsRepository {
         return shiftsWithFacilityName as IShiftsWithFacilityName[];
     }
 
-    async getShiftById(
-        shiftId: number,
-    ): Promise<IShiftsWithFacilityName | null> {
+    async getShiftById(shiftId: number): Promise<IShiftsWithFacilityId | null> {
         const shift = await prisma.question_one_shifts.findUnique({
             where: {
                 shift_id: shiftId,
             },
+            include: {
+                facilities: {
+                    select: {
+                        facility_id: true,
+                    },
+                },
+            },
         });
 
-        return shift as IShiftsWithFacilityName | null;
+        return shift as IShiftsWithFacilityId | null;
     }
 }

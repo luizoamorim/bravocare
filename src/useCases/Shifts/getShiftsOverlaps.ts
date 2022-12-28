@@ -22,12 +22,23 @@ export default class GetShiftsOverlaps {
             return "One of these shifts does not exists!";
         }
 
-        console.log("TYPO: ", shiftA?.end_time);
+        const shiftTimesDiff =
+            (shiftA.end_time.getTime() - shiftB.start_time.getTime()) / 1000;
 
-        return {
-            minutes: 0,
-            maximumOverlapThreshold: 0,
-            isExceedsOverlapThreshold: false,
-        };
+        const overlap = shiftTimesDiff / 60;
+
+        if (shiftA.facilities.facility_id === shiftB.facilities.facility_id) {
+            return {
+                minutes: overlap,
+                maximumOverlapThreshold: 30,
+                isExceedsOverlapThreshold: overlap > 30,
+            };
+        } else {
+            return {
+                minutes: overlap,
+                maximumOverlapThreshold: 0,
+                isExceedsOverlapThreshold: overlap > 0,
+            };
+        }
     }
 }
