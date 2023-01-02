@@ -1,9 +1,13 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { IShiftsOverlapResponse, IShiftsWithFacilityName } from "../data";
+import { PostgresJobsRepository } from "../repositories/postgresDatabase/postgresJobsRepository";
+import PostgresNurseHiredJobs from "../repositories/postgresDatabase/postgresNurseHiredJobs";
 import { PostgresShiftsRepository } from "../repositories/postgresDatabase/postgresShiftsRepository";
+import { GetSpotsByJobByFacility } from "../useCases/Jobs";
 import { GetShiftsWithFacilityName } from "../useCases/Shifts";
 import GetShiftsOverlaps from "../useCases/Shifts/getShiftsOverlaps";
+import { IShiftsWithFacilityNameView } from "../view";
 
 export async function questionOneShiftsRoutes(fastify: FastifyInstance) {
     fastify.get("/shifts", async () => {
@@ -12,7 +16,7 @@ export async function questionOneShiftsRoutes(fastify: FastifyInstance) {
             shiftsRepository,
         );
 
-        const shiftsWithFacilityName: IShiftsWithFacilityName[] =
+        const shiftsWithFacilityName: IShiftsWithFacilityNameView[] =
             await getShiftsWithFacilityNameUseCase.execute();
 
         return shiftsWithFacilityName;
@@ -46,4 +50,19 @@ export async function questionOneShiftsRoutes(fastify: FastifyInstance) {
 
         return isShiftsOverlap;
     });
+
+    fastify.get(
+        "/remainingSpotsByFacilityByJobType",
+        async (request, reply) => {
+            const jobsRepository = new PostgresJobsRepository();
+            const postgresNurseHiredJobs = new PostgresNurseHiredJobs();
+            const getSpotsByJobByFacility = new GetSpotsByJobByFacility(
+                jobsRepository,
+                postgresNurseHiredJobs,
+            );
+
+            const resp = await getSpotsByJobByFacility.execute();
+            return resp;
+        },
+    );
 }

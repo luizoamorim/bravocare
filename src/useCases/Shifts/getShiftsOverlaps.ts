@@ -29,13 +29,13 @@ export default class GetShiftsOverlaps {
 
         if (shiftA.facilities.facility_id === shiftB.facilities.facility_id) {
             return {
-                minutes: overlap,
+                minutes: overlap > 0 ? overlap : 0,
                 maximumOverlapThreshold: 30,
                 isExceedsOverlapThreshold: overlap > 30,
             };
         } else {
             return {
-                minutes: overlap,
+                minutes: overlap > 0 ? overlap : 0,
                 maximumOverlapThreshold: 0,
                 isExceedsOverlapThreshold: overlap > 0,
             };
