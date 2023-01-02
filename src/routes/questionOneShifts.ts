@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { IShiftsOverlapResponse, IShiftsWithFacilityName } from "../data";
+import IJobs from "../data/IJobs";
 import { PostgresJobsRepository } from "../repositories/postgresDatabase/postgresJobsRepository";
 import PostgresNurseHiredJobs from "../repositories/postgresDatabase/postgresNurseHiredJobs";
 import { PostgresShiftsRepository } from "../repositories/postgresDatabase/postgresShiftsRepository";
@@ -61,8 +62,9 @@ export async function questionOneShiftsRoutes(fastify: FastifyInstance) {
                 postgresNurseHiredJobs,
             );
 
-            const resp = await getSpotsByJobByFacility.execute();
-            return resp;
+            const remainingSpotsByFacility: IJobs[] =
+                await getSpotsByJobByFacility.execute();
+            return remainingSpotsByFacility;
         },
     );
 }
