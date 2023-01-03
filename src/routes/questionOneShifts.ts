@@ -7,6 +7,7 @@ import PostgresNurseHiredJobs from "../repositories/postgresDatabase/postgresNur
 import PostgresNurseRepository from "../repositories/postgresDatabase/postgresNurseRepository";
 import { PostgresShiftsRepository } from "../repositories/postgresDatabase/postgresShiftsRepository";
 import { GetSpotsByJobByFacility } from "../useCases/Jobs";
+import GetExistentJobsByNurse from "../useCases/Nurse/getExistentJobsByNurse";
 import GetNurseCoWorkers from "../useCases/Nurse/getNurseCoWorkers";
 import { GetShiftsWithFacilityName } from "../useCases/Shifts";
 import GetShiftsOverlaps from "../useCases/Shifts/getShiftsOverlaps";
@@ -70,13 +71,23 @@ export async function questionOneShiftsRoutes(fastify: FastifyInstance) {
         },
     );
 
-    fastify.get("/nurseCoWorkers", async (request, reply) => {
+    fastify.get("/existentJobsByNurse", async (request, reply) => {
         const postgresNurseRepository = new PostgresNurseRepository();
-        const getSpotsByJobByFacility = new GetNurseCoWorkers(
+        const getExistentJobsByNurse = new GetExistentJobsByNurse(
             postgresNurseRepository,
         );
 
-        const nurseCoWorkers = await getSpotsByJobByFacility.execute();
+        const existentJobsByNurse = await getExistentJobsByNurse.execute();
+        return existentJobsByNurse;
+    });
+
+    fastify.get("/nurseCoWorkers", async (request, reply) => {
+        const postgresNurseRepository = new PostgresNurseRepository();
+        const getNurseCoWorkers = new GetNurseCoWorkers(
+            postgresNurseRepository,
+        );
+
+        const nurseCoWorkers = await getNurseCoWorkers.execute();
         return nurseCoWorkers;
     });
 }
