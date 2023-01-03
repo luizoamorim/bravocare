@@ -27,22 +27,26 @@ model facilities {
 }
 
 model jobs {
-  job_id                     Int        @id
-  facilities                 facilities @relation(fields: [facility_id], references: [facility_id])
+  job_id                     Int                @id
+  facilities                 facilities         @relation(fields: [facility_id], references: [facility_id])
   facility_id                Int
   nurse_type_needed          String
   total_number_nurses_needed Int
+  nurse_hired_jobs           nurse_hired_jobs[]
 }
 
 model nurses {
-  nurse_id   Int    @id
-  nurse_name String
-  nurse_type String
+  nurse_id         Int                @id
+  nurse_name       String
+  nurse_type       String
+  nurse_hired_jobs nurse_hired_jobs[]
 }
 
 model nurse_hired_jobs {
   job_id   Int
+  job      jobs   @relation(fields: [job_id], references: [job_id])
   nurse_id Int
+  nurse    nurses @relation(fields: [nurse_id], references: [nurse_id])
 
   @@id([job_id, nurse_id])
 }

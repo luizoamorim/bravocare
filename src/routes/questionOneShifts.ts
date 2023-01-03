@@ -4,8 +4,10 @@ import { IShiftsOverlapResponse, IShiftsWithFacilityName } from "../data";
 import IJobs from "../data/IJobs";
 import { PostgresJobsRepository } from "../repositories/postgresDatabase/postgresJobsRepository";
 import PostgresNurseHiredJobs from "../repositories/postgresDatabase/postgresNurseHiredJobs";
+import PostgresNurseRepository from "../repositories/postgresDatabase/postgresNurseRepository";
 import { PostgresShiftsRepository } from "../repositories/postgresDatabase/postgresShiftsRepository";
 import { GetSpotsByJobByFacility } from "../useCases/Jobs";
+import GetNurseCoWorkers from "../useCases/Nurse/getNurseCoWorkers";
 import { GetShiftsWithFacilityName } from "../useCases/Shifts";
 import GetShiftsOverlaps from "../useCases/Shifts/getShiftsOverlaps";
 import { IShiftsWithFacilityNameView } from "../view";
@@ -67,4 +69,14 @@ export async function questionOneShiftsRoutes(fastify: FastifyInstance) {
             return remainingSpotsByFacility;
         },
     );
+
+    fastify.get("/nurseCoWorkers", async (request, reply) => {
+        const postgresNurseRepository = new PostgresNurseRepository();
+        const getSpotsByJobByFacility = new GetNurseCoWorkers(
+            postgresNurseRepository,
+        );
+
+        const nurseCoWorkers = await getSpotsByJobByFacility.execute();
+        return nurseCoWorkers;
+    });
 }
