@@ -36,7 +36,6 @@ export default class GetSpotsByJobByFacility {
         });
 
         let remainingSpotsByFacility = [remainingSpots![0]];
-        console.log(remainingSpots);
         for (let i = 1; i < remainingSpots!.length; i++) {
             if (
                 remainingSpotsByFacility[remainingSpotsByFacility.length - 1]

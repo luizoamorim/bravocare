@@ -13,7 +13,6 @@ export default class GetShiftsWithFacilityName {
 
         const shiftsWithFacilitNameView: IShiftsWithFacilityNameView[] =
             shiftsWithFacilitNameDTO.map((shift: IShiftsWithFacilityName) => {
-                console.log(shift.shift_date.toISOString().slice(0, -1));
                 return {
                     shift_id: shift.shift_id,
                     facility_id: shift.facility_id,
